@@ -12,47 +12,49 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 #Creating our variables
 ev3 = EV3Brick()
 
-left_motor = Motor(Port.D)
-left_sensor = ColorSensor(Port.S1).color()
-
+left_motor = Motor(Port.A)
+left_sensor = ColorSensor(Port.S1)
 right_motor = Motor(Port.D)
-right_sensor = ColorSensor(Port.S4).color()
-program = True
-SPEED = 300
-SWING_SPEED = 50
+right_sensor = ColorSensor(Port.S4)
+
+
+BLACK = 20
+WHITE = 50
+DRIVE = 300
+SWING_DRIVE = 50
 
 driving_left = False
 driving_right = False
 came_back = True
 
 
-#Functions
-def Drive(): #This function drives the machine
-    global driving_left
-    global driving_right
 
-    if left_sensor == Color.BLACK and right_sensor == Color.WHITE: # left sees black, right sees white (too far to the right)
+
+while True:
+    #Functions
+    left_col = left_sensor.reflection()
+    right_col = right_sensor.reflection()
+
+    if left_col <= BLACK and right_col >= WHITE: #This means that the left sensor sees black and the right sensor sees white (going to far to the right)
         came_back = False
         driving_left = True
-        right_motor.run(SPEED)
-        left_motor.run(SWING_SPEED)
-        if right_sensor == Color.WHITE and left_sensor == Color.WHITE:
+        right_motor.run(DRIVE)
+        left_motor.run(SWING_DRIVE)
+        if right_col >= WHITE and left_col >= WHITE:
             came_back = True
             driving_left = False
-    elif right_sensor == Color.BLACK and left_sensor == Color.WHITE: # right sees black, left sees white (too far to the left)
+    elif right_col <= BLACK and left_col >= WHITE: #tHIS MEANS THAT THE RIGHT SENSOR sees black and the left sensor sees white (going to far to the left)
         came_back = False
         driving_right = True
-        right_motor.run(SWING_SPEED)
-        left_motor.run(SPEED)
-        if right_sensor == Color.WHITE and left_sensor == Color.WHITE:
+        right_motor.run(SWING_DRIVE)
+        left_motor.run(DRIVE)
+        if right_col >= WHITE and left_col >= WHITE:
             came_back = True
             driving_right = False
-    elif left_sensor == Color.RED or right_sensor == Color.RED: # if either sensor sees red
-        ...
-    else: #Then the only other thing that can happen is if the robot is in line, so both sensors see white
+    elif right_col >= WHITE and right_col >= WHITE: #Then the only other thing that can happen is if the robot is in line, so both sensors see white
         if came_back:
-            right_motor.run(SPEED)
-            left_motor.run(SPEED)
+            right_motor.run(DRIVE)
+            left_motor.run(DRIVE)
             ev3.screen.print("Forward")
         else:
             if driving_left:
@@ -64,9 +66,4 @@ def Drive(): #This function drives the machine
             else:
                 ev3.screen.print("Logic error")
                 ev3.speaker.say("Logic errort")
-            
-
-
-while program: #while our program is true
-    wait(2000) #Waits 2 seconds before starting
-    Drive()
+                
