@@ -43,7 +43,7 @@ while True:
         if right_col > WHITE and left_col > WHITE:
             came_back = True
             driving_left = False
-    elif right_col < BLACK and left_col > WHITE: #tHIS MEANS THAT THE RIGHT SENSOR sees black and the left sensor sees white (going to far to the left)
+    elif right_col < BLACK and left_col > WHITE: #This means that the right sensor sees black and the left sensor sees white (going to far to the left)
         came_back = False
         driving_right = True
         right_motor.run(SWING_DRIVE)
