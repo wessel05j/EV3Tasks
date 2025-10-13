@@ -32,6 +32,7 @@ came_back = True
 
 while True:
     #Functions
+    ev3.screen.print("All sensors are working")
     left_col = left_sensor.reflection()
     right_col = right_sensor.reflection()
 
