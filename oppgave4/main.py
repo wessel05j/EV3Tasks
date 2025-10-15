@@ -23,7 +23,10 @@ WHITE = 50
 DRIVE = 300
 SWING_DRIVE = 75
 
-
+def kjør_forbi_kryss():
+    left_motor.run(DRIVE)
+    right_motor.run(DRIVE)
+    wait(1000)  # kjør rett frem i 1 sekund
 
 
 while True:
@@ -35,8 +38,11 @@ while True:
         left_motor.run(SWING_DRIVE)
     elif right_col < BLACK and left_col > WHITE: #This means that the right sensor sees black and the left sensor sees white (going to far to the left)
         right_motor.run(SWING_DRIVE)
-        left_motor.run(DRIVE)
+        left_motor.run(DRIVE)    
+    elif left_col < BLACK and right_col < BLACK:
+        kjør_forbi_kryss()
     else:
         left_motor.run(DRIVE)
         right_motor.run(DRIVE)
+    
             
