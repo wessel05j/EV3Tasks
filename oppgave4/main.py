@@ -16,17 +16,15 @@ left_motor = Motor(Port.A)
 left_sensor = ColorSensor(Port.S1)
 right_motor = Motor(Port.D)
 right_sensor = ColorSensor(Port.S4)
+watch = StopWatch()
 
 
-BLACK = 20
+BLACK = 30
 WHITE = 50
-DRIVE = 200
-SWING_DRIVE = 100
-
-def kjør_forbi_kryss():
-    left_motor.run(DRIVE)
-    right_motor.run(DRIVE)
-    wait(1000)  # kjør rett frem i 1 sekund
+DRIVE = 250
+FAST = 300
+SWING_DRIVE = 40
+SWING_DRIVE_FAST = 100
 
 
 while True:
@@ -34,15 +32,20 @@ while True:
     right_col = right_sensor.reflection()
 
     if left_col < BLACK and right_col > WHITE: #This means that the left sensor sees black and the right sensor sees white (going to far to the right)
-        right_motor.run(DRIVE)
+        right_motor.run(SWING_DRIVE_FAST)
         left_motor.run(SWING_DRIVE)
+        watch.reset()
     elif right_col < BLACK and left_col > WHITE: #This means that the right sensor sees black and the left sensor sees white (going to far to the left)
         right_motor.run(SWING_DRIVE)
-        left_motor.run(DRIVE)    
-    elif left_col < BLACK and right_col < BLACK:
-        kjør_forbi_kryss()
+        left_motor.run(SWING_DRIVE_FAST)
+        watch.reset()    
     else:
-        left_motor.run(DRIVE)
-        right_motor.run(DRIVE)
+        if watch.time() >= 2000:
+            left_motor.run(FAST)
+            right_motor.run(FAST)
+        else:
+            left_motor.run(DRIVE)
+            right_motor.run(DRIVE)
+        
     
             
