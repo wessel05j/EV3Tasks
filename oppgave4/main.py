@@ -20,8 +20,8 @@ right_sensor = ColorSensor(Port.S4)
 
 BLACK = 20
 WHITE = 50
-DRIVE = 300
-SWING_DRIVE = 75
+DRIVE = 200
+SWING_DRIVE = 100
 
 
 
