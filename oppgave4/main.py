@@ -18,27 +18,35 @@ right_motor = Motor(Port.D)
 right_sensor = ColorSensor(Port.S4)
 watch = StopWatch()
 
-
 BLACK = 30
-WHITE = 50
-DRIVE = 400
-FAST = 500
-SWING_DRIVE = 40
-SWING_DRIVE_FAST = 100
+INNER_BLACK = 10
+WHITE = 40
+DRIVE = 260
+FAST = 260
+SLOW = 60
 
 #Entering out while loop that will go untill we cancel the program from the robot
 while True:
     #checks the color for each loop
     left_col = left_sensor.reflection()
     right_col = right_sensor.reflection()
-
+    ev3.screen.print(left_col, right_col)
+   
     if left_col < BLACK and right_col > WHITE: #This means that the left sensor sees black and the right sensor sees white (going to far to the right)
-        right_motor.run(SWING_DRIVE_FAST) #right motor drives fast to swing left
-        left_motor.run(SWING_DRIVE)
+        if left_col < INNER_BLACK:
+            left_motor.run(SLOW/1.5)
+            right_motor.run(DRIVE/1.5)
+        else:
+            right_motor.run(DRIVE-70) 
+            left_motor.run(SLOW-20)
         watch.reset() #resets clock since we are not driving right forward
     elif right_col < BLACK and left_col > WHITE: #This means that the right sensor sees black and the left sensor sees white (going to far to the left)
-        right_motor.run(SWING_DRIVE)
-        left_motor.run(SWING_DRIVE_FAST) #left motor drivest fast to swing right
+        if right_col < INNER_BLACK:
+            right_motor.run(SLOW/1.5)
+            left_motor.run(DRIVE/1.5) 
+        else:
+            right_motor.run(SLOW-20) 
+            left_motor.run(DRIVE-70)
         watch.reset() #resets clock since we are not driving right forward    
     else:
         #if there has gone 2 seconds driving forward then the robot will go extra fast
@@ -48,6 +56,6 @@ while True:
         else: #If not then just run
             left_motor.run(DRIVE)
             right_motor.run(DRIVE)
-        
+    wait(50)
     
             
